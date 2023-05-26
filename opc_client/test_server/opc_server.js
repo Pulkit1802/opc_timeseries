@@ -24,6 +24,7 @@ server.initialize(() => {
     });
 
     // Create a variable node in the address space
+
     namespace.addVariable({
         nodeId: "ns=1;s=Scalar_Simulation_String",
         browseName: "Scalar_Simulation_String",
@@ -40,6 +41,10 @@ server.initialize(() => {
         },
     });
 
+    let var2 = 3.14;
+
+    setInterval(() => var2 = Math.random()*15, 1000);
+
     namespace.addVariable({
         nodeId: "ns=1;s=Scalar_Simulation_Double",
         browseName: "Scalar_Simulation_Double",
@@ -47,7 +52,7 @@ server.initialize(() => {
         dataType: "Double",
         value: {
             get: function () {
-                return new opcua.Variant({ dataType: opcua.DataType.Double, value: 1000 });
+                return new opcua.Variant({ dataType: opcua.DataType.Double, value: var2 });
             },
             set: function (variant) {
                 variable2 = parseFloat(variant.value);
