@@ -1,5 +1,5 @@
 from pyprofibus import Profibus
-
+from storeData import storeRecievedData
 
 def listen_to_profibus():
     profibus = Profibus()
@@ -24,6 +24,7 @@ def listen_to_profibus():
 
 def process_received_data(data):
     print("Received data:", data)
+    storeRecievedData(data)
 
 
 listen_to_profibus()
