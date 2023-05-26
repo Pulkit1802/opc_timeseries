@@ -1,7 +1,5 @@
 const { InfluxDB } = require('@influxdata/influxdb-client')
-const {INFLUX_TOKEN, INFLUX_URL, INFLUX_ORG, INFLUX_BUCKET} = require('./loadenv')
-
-// console.log(INFLUX_TOKEN, INFLUX_URL, INFLUX_ORG, INFLUX_BUCKET)
+const {INFLUX_TOKEN, INFLUX_URL, INFLUX_ORG, INFLUX_BUCKET} = require('./config')
 
 
 const influx_client = new InfluxDB({url: INFLUX_URL, token: INFLUX_TOKEN})
@@ -17,15 +15,15 @@ const fetch2DaysData = async (req, res) => {
     await queryClient.queryRows(fluxQuery, {
         next: (row, tableMeta) => {
             
-            let o = tableMeta.toObject(row)
-            delete o._start
-            delete o._stop
-            delete o._measurement
-            delete o.host
-            delete o.result
-            delete o.table
+            let curObj = tableMeta.toObject(row)
+            delete curObj._start
+            delete curObj._stop
+            delete curObj._measurement
+            delete curObj.host
+            delete curObj.result
+            delete curObj.table
 
-            data.push(o)
+            data.push(curObj)
 
         },
         error: (error) => {
