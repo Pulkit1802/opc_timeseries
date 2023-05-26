@@ -10,7 +10,8 @@
     "typescript": "^5.0.4"
   },
   "scripts": {
-    "start": "ts-node-dev --respawn --transpile-only ./src/opc_client.ts"
+    "start": "ts-node-dev --respawn --transpile-only ./client/opc_client.ts",
+    "test": "ts-node-dev --respawn --transpile-only ./test_server/opc_server.ts"
   },
   "devDependencies": {
     "ts-node-dev": "^2.0.0"
