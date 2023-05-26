@@ -8,7 +8,7 @@ const queryClient = influx_client.getQueryApi(INFLUX_ORG)
 
 const fetch2DaysData = async (req, res) => {
     let fluxQuery = `from(bucket: "${INFLUX_BUCKET}")
-        |> range(start: -2d)
+        |> range(start: -1m)
     `
     let data = []
 
@@ -30,6 +30,7 @@ const fetch2DaysData = async (req, res) => {
             console.log(error)
         },
         complete: () => {
+            console.log(data.length)
             res.status(200).json(data)
         }
     })
