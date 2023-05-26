@@ -1,0 +1,9 @@
+{
+  "name": "opc_client",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "node-opcua": "^2.103.0"
+  }
+}
