@@ -18,6 +18,11 @@ server.initialize(() => {
         browseName: "MyDevice"
     });
 
+    const device1 = namespace.addObject({
+        organizedBy: addressSpace.rootFolder.objects,
+        browseName: "My_Device"
+    });
+
     // Create a variable node in the address space
     namespace.addVariable({
         nodeId: "ns=1;s=Scalar_Simulation_String",
@@ -27,6 +32,22 @@ server.initialize(() => {
         value: {
             get: function () {
                 return new opcua.Variant({ dataType: opcua.DataType.String, value: "Hello OPC UA client!" });
+            },
+            set: function (variant) {
+                variable2 = String(variant.value);
+                return opcua.StatusCodes.Good;
+            }
+        },
+    });
+
+    namespace.addVariable({
+        nodeId: "ns=1;s=Scalar_Simulation_Double",
+        browseName: "Scalar_Simulation_Double",
+        componentOf: device1,
+        dataType: "Double",
+        value: {
+            get: function () {
+                return new opcua.Variant({ dataType: opcua.DataType.Double, value: 1000 });
             },
             set: function (variant) {
                 variable2 = parseFloat(variant.value);

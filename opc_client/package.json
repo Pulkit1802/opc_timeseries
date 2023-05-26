@@ -11,7 +11,7 @@
   },
   "scripts": {
     "start": "ts-node-dev --respawn --transpile-only ./client/opc_client.ts",
-    "test": "ts-node-dev --respawn --transpile-only ./test_server/opc_server.ts"
+    "test": "nodemon ./test_server/opc_server.ts"
   },
   "devDependencies": {
     "ts-node-dev": "^2.0.0"
