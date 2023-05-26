@@ -1,15 +1,13 @@
 const { InfluxDB } = require('@influxdata/influxdb-client')
-const {INFLUX_TOKEN, INFLUX_URL, INFLUX_ORG, INFLUX_BUCKET} = require('./config')
+const {INFLUX_TOKEN, INFLUX_URL, INFLUX_ORG} = require('../config')
 
 
 const influx_client = new InfluxDB({url: INFLUX_URL, token: INFLUX_TOKEN})
 const queryClient = influx_client.getQueryApi(INFLUX_ORG)
 
 
-const fetch2DaysData = async (req, res) => {
-    let fluxQuery = `from(bucket: "${INFLUX_BUCKET}")
-        |> range(start: -1m)
-    `
+const fetch2DaysData = async (res, fluxQuery) => {
+    
     let data = []
 
     await queryClient.queryRows(fluxQuery, {
