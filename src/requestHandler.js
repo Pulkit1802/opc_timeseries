@@ -1,32 +1,31 @@
-const { InfluxDB, Point } = require('@influxdata/influxdb-client')
+const { InfluxDB } = require('@influxdata/influxdb-client')
+const {INFLUX_TOKEN, INFLUX_URL, INFLUX_ORG, INFLUX_BUCKET} = require('./loadenv')
 
-token = process.env.INFLUX_TOKEN
-url = process.env.INFLUX_URL
+// console.log(INFLUX_TOKEN, INFLUX_URL, INFLUX_ORG, INFLUX_BUCKET)
 
-const org = process.env.INFLUX_ORG
-const bucket = process.env.INFLUX_BUCKET
 
-const client = new InfluxDB({ url, token })
-let queryClient = client.queryClient(org)
+const influx_client = new InfluxDB({url: INFLUX_URL, token: INFLUX_TOKEN})
+const queryClient = influx_client.getQueryApi(INFLUX_ORG)
 
-const get2DaysData = async (res) => {
-    let fluxQuery = `from(bucket: "${bucket}")
+
+const fetch2DaysData = async (req, res) => {
+    let fluxQuery = `from(bucket: "${INFLUX_BUCKET}")
         |> range(start: -2d)
     `
     let data = []
 
-    await queryClient.qureyRows(fluxQuery, {
+    await queryClient.queryRows(fluxQuery, {
         next: (row, tableMeta) => {
+            
+            let o = tableMeta.toObject(row)
+            delete o._start
+            delete o._stop
+            delete o._measurement
+            delete o.host
+            delete o.result
+            delete o.table
 
-            let curObj = tableMeta.toObject(row)
-            delete curObj._start
-            delete curObj._stop
-            delete curObj._measurement
-            delete curObj.host
-            delete curObj.result
-            delete curObj.table
-
-            data.push(curObj)
+            data.push(o)
 
         },
         error: (error) => {
@@ -35,6 +34,11 @@ const get2DaysData = async (res) => {
         complete: () => {
             res.status(200).json(data)
         }
-    });
+    })
 
+}
+
+
+module.exports = {
+    fetch2DaysData
 }
