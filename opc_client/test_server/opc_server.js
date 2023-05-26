@@ -43,7 +43,7 @@ server.initialize(() => {
 
     let var2 = 3.14;
 
-    setInterval(() => var2 = Math.random()*15, 1000);
+    setInterval(() => var2 = Math.random()*15, 5000);
 
     namespace.addVariable({
         nodeId: "ns=1;s=Scalar_Simulation_Double",
@@ -53,6 +53,26 @@ server.initialize(() => {
         value: {
             get: function () {
                 return new opcua.Variant({ dataType: opcua.DataType.Double, value: var2 });
+            },
+            set: function (variant) {
+                variable2 = parseFloat(variant.value);
+                return opcua.StatusCodes.Good;
+            }
+        },
+    });
+
+    let var3 = 4.2;
+
+    setInterval(() => var3 = Math.random() * 20 + 30, 100);
+
+    namespace.addVariable({
+        nodeId: "ns=1;s=Scalar_Simulation_Triple",
+        browseName: "Scalar_Simulation_Triple",
+        componentOf: device1,
+        dataType: "Double",
+        value: {
+            get: function () {
+                return new opcua.Variant({ dataType: opcua.DataType.Double, value: var3 });
             },
             set: function (variant) {
                 variable2 = parseFloat(variant.value);

@@ -8,6 +8,7 @@ import {
     TimestampsToReturn,
     MonitoringParametersOptions,
     ClientMonitoredItem,
+    ClientMonitoredItemGroup,
     DataValue,
     ReadValueId
 } from "node-opcua";
@@ -171,7 +172,7 @@ async function main() {
         console.log("session created !");
 
         const subscription = ClientSubscription.create(session, {
-            requestedPublishingInterval: 1000,
+            requestedPublishingInterval: 100,
             requestedLifetimeCount:      100,
             requestedMaxKeepAliveCount:   10,
             maxNotificationsPerPublish:  100,
@@ -180,46 +181,73 @@ async function main() {
         });
         
         subscription.on("started", function() {
-            console.log("subscription started for 2 seconds - subscriptionId=", subscription.subscriptionId);
-        }).on("keepalive", function() {
-            console.log("keepalive");
-        }).on("terminated", function() {
-            console.log("terminated");
-        });
+            console.log("subscription started - subscriptionId=", subscription.subscriptionId);
+        })
         
-        
+        const itemsToMonitor = [
+            {'nodeId': "ns=1;s=Scalar_Simulation_Double", 'attributeId': AttributeIds.Value},
+            {'nodeId': "ns=1;s=Scalar_Simulation_Triple", 'attributeId': AttributeIds.Value},
+        ]
         // install monitored item
-        
-        const itemToMonitor = {
-            nodeId: "ns=1;s=Scalar_Simulation_Double",
-            attributeId: AttributeIds.Value
-        };
+
         const parameters: MonitoringParametersOptions = {
             samplingInterval: 100,
             discardOldest: true,
             queueSize: 10
         };
-        
-        const monitoredItem  = ClientMonitoredItem.create(
+
+        const monitoredItems = ClientMonitoredItemGroup.create(
             subscription,
-            itemToMonitor,
+            itemsToMonitor,
             parameters,
-            TimestampsToReturn.Both
+            TimestampsToReturn.Both,
         );
+
+        const monitoredIds: any[] = [];
+
+        for (const monitoredItem of monitoredItems.monitoredItems) {
+            monitoredIds.push(monitoredItem.monitoredItemId);
+        }
+
+        console.log(monitoredIds);
         
-        monitoredItem.on("changed", (dataValue: DataValue) => {
-            console.log(" value has changed : ", dataValue.value.toString());
+        monitoredItems.on("changed", (monitoredItem, dataValue, index) => {
+            const data = dataValue.toJSON();
+            // console.log(monitoredItem.monitoredItemId, index)
+            console.log(" value has changed : ", data.value.value);
         });
+
+        // const itemToMonitor = {
+        //     nodeId: "ns=1;s=Scalar_Simulation_Double",
+        //     attributeId: AttributeIds.Value
+        // };
+        // const parameters: MonitoringParametersOptions = {
+        //     samplingInterval: 100,
+        //     discardOldest: true,
+        //     queueSize: 10
+        // };
+        
+        // const monitoredItem  = ClientMonitoredItem.create(
+        //     subscription,
+        //     itemToMonitor,
+        //     parameters,
+        //     TimestampsToReturn.Both
+        // );
+        
+        // monitoredItem.on("changed", (dataValue: DataValue) => {
+        //     const data = dataValue.toJSON();
+        //     console.log(" value has changed : ", data.value.value);
+        // });
         
         
         
         async function timeout(ms: number) {
             return new Promise(resolve => setTimeout(resolve, ms));
         }
-        await timeout(10000);
+        // await timeout(10000);
         
-        console.log("now terminating subscription");
-        await subscription.terminate();
+        // console.log("now terminating subscription");
+        // await subscription.terminate();
         
         
     } catch (err) {
