@@ -7,6 +7,4 @@ router
 .route("/")
 .get(get2dController);
 
-module.exports = {
-    dashboradRouter: router
-};
+exports.dashboardRouter = router;

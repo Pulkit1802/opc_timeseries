@@ -2,7 +2,7 @@ const {fetch2DaysData} = require('../service/getTimeSeriesData')
 const {INFLUX_BUCKET} = require('../config')
 
 const get2dController = async (req, res) => {
-    const timeRange = req.query.timeRange || '-1d'
+    const timeRange = req.query.timeRange || '-1m'
     let fluxQuery = `from(bucket: "${INFLUX_BUCKET}")
         |> range(start: ${timeRange})
     `

@@ -1,5 +1,6 @@
 import { opcEndpoint } from "./loader";
-import getVars from "./dbConnect";
+import getVars from "./getVariables";
+import { writeData } from "./storeVariableData";
 
 import {
     OPCUAClient,
@@ -218,13 +219,18 @@ async function main() {
 
         console.log(monitoredIds);
         
+        var dataSampled = 0
+
         monitoredItems.on("changed", (monitoredItem, dataValue, index) => {
-            const data = dataValue.toJSON();
-            // console.log(monitoredItem.monitoredItemId, index)
-            console.log(" value has changed : ", data.value.value);
+            const dataJson = dataValue.toJSON();
+            const data = dataValue.value.value;
+            writeData(opcVarData[index].displayName, data, 'string')
+            dataSampled += 1
         });
     
         
+        setTimeout(() => console.log(dataSampled), 10000)
+
         async function timeout(ms: number) {
             return new Promise(resolve => setTimeout(resolve, ms));
         }
