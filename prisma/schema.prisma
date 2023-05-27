@@ -21,6 +21,5 @@ model OpcVariable {
   id    String @id @default(uuid())
   browseName  String @unique
   displayName String
-  deviceName String
   variableNodeId String
 }
