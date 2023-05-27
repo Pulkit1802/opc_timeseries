@@ -1,10 +1,20 @@
-import { PrismaClient } from '@prisma/client'
+import {PrismaClient} from '@prisma/client'
 
+const client = new PrismaClient()
 
-const prisma = new PrismaClient()
+const getVars = async () => {
+    const data = await client.opcVariable.findMany({
+        select: {
+            browseName: true,
+            displayName: true,
+            variableNodeId: true,
+        },
+    })
 
-const data = await prisma.OpcVariable.findMany({
-    select: ['browseName', 'displayName', 'variableNodeId']
-});
+    console.log(data)
 
-console.log(data);
+    return data
+    
+}
+
+export default getVars;

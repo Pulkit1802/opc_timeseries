@@ -1,4 +1,5 @@
 import { opcEndpoint } from "./loader";
+import getVars from "./dbConnect";
 
 import {
     OPCUAClient,
@@ -165,6 +166,8 @@ const client = OPCUAClient.create(options);
 async function main() {
     try {
 
+        const opcVarData = await getVars();
+
         await client.connect(opcEndpoint);
         console.log("connected !");
 
@@ -183,11 +186,15 @@ async function main() {
         subscription.on("started", function() {
             console.log("subscription started - subscriptionId=", subscription.subscriptionId);
         })
-        
-        const itemsToMonitor = [
-            {'nodeId': "ns=1;s=Scalar_Simulation_Double", 'attributeId': AttributeIds.Value},
-            {'nodeId': "ns=1;s=Scalar_Simulation_Triple", 'attributeId': AttributeIds.Value},
-        ]
+
+
+        const itemsToMonitor = [];
+
+        for (const opcVar of opcVarData) {
+            // @ts-ignore
+            itemsToMonitor.push({'nodeId': opcVar.variableNodeId, 'attributeId': AttributeIds.Value})
+        }
+    
         // install monitored item
 
         const parameters: MonitoringParametersOptions = {
@@ -216,30 +223,7 @@ async function main() {
             // console.log(monitoredItem.monitoredItemId, index)
             console.log(" value has changed : ", data.value.value);
         });
-
-        // const itemToMonitor = {
-        //     nodeId: "ns=1;s=Scalar_Simulation_Double",
-        //     attributeId: AttributeIds.Value
-        // };
-        // const parameters: MonitoringParametersOptions = {
-        //     samplingInterval: 100,
-        //     discardOldest: true,
-        //     queueSize: 10
-        // };
-        
-        // const monitoredItem  = ClientMonitoredItem.create(
-        //     subscription,
-        //     itemToMonitor,
-        //     parameters,
-        //     TimestampsToReturn.Both
-        // );
-        
-        // monitoredItem.on("changed", (dataValue: DataValue) => {
-        //     const data = dataValue.toJSON();
-        //     console.log(" value has changed : ", data.value.value);
-        // });
-        
-        
+    
         
         async function timeout(ms: number) {
             return new Promise(resolve => setTimeout(resolve, ms));
