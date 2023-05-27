@@ -25,7 +25,7 @@ const writeData = async (opcVar, value, type) => {
         // .tag("opcVar", opcVar)
         // [type+"Field"](opcVar, value)
         writeClient.writePoint(point);
-        // console.log('Data Written')
+        console.log('Data Written')
 
         writeClient.flush()
 
@@ -34,9 +34,6 @@ const writeData = async (opcVar, value, type) => {
     }
 }
 
-const start_time = Date.now()
-for(i=0;i<=1000;i++) {
-    writeData('nodetest', Math.random() * i, 'float')
+export {
+    writeData
 }
-
-console.log((Date.now() - start_time) / 1000)

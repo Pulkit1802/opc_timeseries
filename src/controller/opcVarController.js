@@ -1,9 +1,11 @@
 const { createNewOpcVar, getAllOpcVars, deleteOpcVar } = require('../service/opcVarService');
+const { restartOpcClient } = require('../utils/opc_client_controller');
 
 const createOne = async (req, res) => {
     try {
         const opcVar = await req.body;
         createNewOpcVar(opcVar);
+        restartOpcClient()
         res.status(200).json(opcVar);   
 
     } catch (error) {

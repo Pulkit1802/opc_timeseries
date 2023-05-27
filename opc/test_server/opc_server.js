@@ -81,6 +81,26 @@ server.initialize(() => {
         },
     });
 
+    let var4 = 4.2;
+
+    setInterval(() => var4 = Math.random() * 20 + 30, 100);
+
+    namespace.addVariable({
+        nodeId: "ns=1;s=Scalar_Simulation_Forth",
+        browseName: "Scalar_Simulation_Forth",
+        componentOf: device1,
+        dataType: "Double",
+        value: {
+            get: function () {
+                return new opcua.Variant({ dataType: opcua.DataType.Double, value: var4 });
+            },
+            set: function (variant) {
+                variable2 = parseFloat(variant.value);
+                return opcua.StatusCodes.Good;
+            }
+        },
+    });
+
     // Start the server
     
 });
