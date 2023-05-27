@@ -1,5 +1,5 @@
 import { opcEndpoint } from "./loader";
-import getVars from "./getVariables";
+import getVars from "./getVariabels";
 import { writeData } from "./storeVariableData";
 
 import {
@@ -177,11 +177,10 @@ async function main() {
 
         const subscription = ClientSubscription.create(session, {
             requestedPublishingInterval: 100,
-            requestedLifetimeCount:      100,
+            // requestedLifetimeCount:      100,
             requestedMaxKeepAliveCount:   10,
             maxNotificationsPerPublish:  100,
             publishingEnabled: true,
-            priority: 10
         });
         
         subscription.on("started", function() {
@@ -199,9 +198,9 @@ async function main() {
         // install monitored item
 
         const parameters: MonitoringParametersOptions = {
-            samplingInterval: 100,
+            samplingInterval: 10,
             discardOldest: true,
-            queueSize: 10
+            queueSize: 100
         };
 
         const monitoredItems = ClientMonitoredItemGroup.create(
@@ -210,21 +209,14 @@ async function main() {
             parameters,
             TimestampsToReturn.Both,
         );
-
-        const monitoredIds: any[] = [];
-
-        for (const monitoredItem of monitoredItems.monitoredItems) {
-            monitoredIds.push(monitoredItem.monitoredItemId);
-        }
-
-        console.log(monitoredIds);
         
         var dataSampled = 0
 
         monitoredItems.on("changed", (monitoredItem, dataValue, index) => {
             const dataJson = dataValue.toJSON();
-            const data = dataValue.value.value;
-            writeData(opcVarData[index].displayName, data, 'string')
+            console.log(dataJson.value.value)
+            // const data = dataValue.value.value;
+            // writeData(opcVarData[index].displayName, data, 'string')
             dataSampled += 1
         });
     

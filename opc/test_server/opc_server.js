@@ -43,7 +43,7 @@ server.initialize(() => {
 
     let var2 = 3.14;
 
-    setInterval(() => var2 = Math.random()*15, 5000);
+    setInterval(() => var2 = Math.random()*15, 100);
 
     namespace.addVariable({
         nodeId: "ns=1;s=Scalar_Simulation_Double",
