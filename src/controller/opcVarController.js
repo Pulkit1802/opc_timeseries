@@ -6,7 +6,7 @@ const createOne = async (req, res) => {
         // console.log(req.body);
         const opcVar = await req.body;
         createNewOpcVar(opcVar);
-        // restartOpcClient()
+        restartOpcClient()
         res.status(200).json(opcVar);   
 
     } catch (error) {

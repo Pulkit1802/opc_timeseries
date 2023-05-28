@@ -14,6 +14,6 @@ process.on('SIGINT', () => {
 
 app.listen(port, () => {
     console.log('Starting OPC Client...');
-    // startOpcClient();
+    startOpcClient();
     console.log(`Server Started on Port ${port}`);
 });
