@@ -1,7 +1,9 @@
 const {InfluxDB, Point} = require('@influxdata/influxdb-client')
-const dotenv = require('dotenv');
 
-dotenv.config({path: './.env'});
+const dotenv = require('dotenv');
+const path = require('path');
+
+dotenv.config({path: path.join( __dirname, '../.env')});
 
 const INFLUX_TOKEN = process.env.INFLUX_TOKEN
 const INFLUX_URL = process.env.INFLUX_URL
@@ -16,12 +18,13 @@ console.log(INFLUX_TOKEN, INFLUX_ORG, INFLUX_BUCKET, INFLUX_URL)
 
 let writeClient = client.getWriteApi(INFLUX_ORG, INFLUX_BUCKET, 'ns')
 
-const writeData = async (opcVar, value, type) => {
+const writeData = async (opcVar: string, value: number, type: string) => {
     try {
 
         let point = new Point('test')
         .tag("host", "host1")
-        .floatField(opcVar, parseFloat(value))
+        .floatField(opcVar, value)
+
         // .tag("opcVar", opcVar)
         // [type+"Field"](opcVar, value)
         writeClient.writePoint(point);

@@ -187,7 +187,6 @@ async function main() {
             console.log("subscription started - subscriptionId=", subscription.subscriptionId);
         })
 
-
         const itemsToMonitor = [];
 
         for (const opcVar of opcVarData) {
@@ -214,9 +213,9 @@ async function main() {
 
         monitoredItems.on("changed", (monitoredItem, dataValue, index) => {
             const dataJson = dataValue.toJSON();
-            console.log(dataJson.value.value)
-            // const data = dataValue.value.value;
-            // writeData(opcVarData[index].displayName, data, 'string')
+            // console.log(dataJson.value.value)
+            const data = dataValue.value.value;
+            writeData(opcVarData[index].displayName, data, 'string')
             dataSampled += 1
         });
     

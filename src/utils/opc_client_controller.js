@@ -1,4 +1,5 @@
 const pm2 = require('pm2');
+const path = require('path');
 
 const startOpcClient = () => {
     pm2.connect(function(err) {
@@ -8,7 +9,7 @@ const startOpcClient = () => {
         }
         
         pm2.start({
-            script: '../../opc/client/opc_client',
+            script: path.join( __dirname, '../../opc/client/opc_client'),
             name: 'opc_client'
         }, function(err, apps) {
             console.log('opc_client started');

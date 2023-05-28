@@ -41,8 +41,25 @@ const deleteOpcVar = async (id) => {
 }
 
 
+const updateOpcVar = async (id, body) => {
+    try {
+        const opcVar = await prisma.OpcVariable.update({
+            where: {
+                id: String(id)
+            },
+            data: body
+        });
+        // console.log(opcVar);
+        return opcVar;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
 module.exports = {
     createNewOpcVar,
     getAllOpcVars,
-    deleteOpcVar
+    deleteOpcVar,
+    updateOpcVar
 }
