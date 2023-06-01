@@ -22,13 +22,13 @@ function VariableCard ({browseName, nodeId, id, displayName, editId, setEditId, 
         setEditBrowseName(null);
         setFormData({
             browseName: '',
-            nodeId: '',
+            variableNodeId: '',
             displayName: ''
         });
     }
 
     const handleDelete = () => {
-        axios.delete('http://localhost:5000/api/v1/opcVar/' + id)
+        axios.delete('http://localhost:8080/api/v1/opcVar/' + id)
         .then((res) => {
             setRefreshVars(prevState => prevState * -1)
         })

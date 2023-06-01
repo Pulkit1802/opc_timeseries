@@ -74,7 +74,7 @@ export default function Admin () {
         e.preventDefault();
         // console.log(formData);
 
-        let url = 'http://localhost:5000/api/v1/opcVar';
+        let url = 'http://localhost:8080/api/v1/opcVar';
 
         if (editId) {
             url = url + '/' + editId;
@@ -99,7 +99,7 @@ export default function Admin () {
     }
 
     React.useEffect(() => {
-        axios.get('http://localhost:5000/api/v1/opcVar')
+        axios.get('http://localhost:8080/api/v1/opcVar')
             .then(res => {
                 setVariableData(res.data.data);
             })
